@@ -4,7 +4,7 @@
 
 ## 🎯 Branch Purpose
 
-This branch contains the **Isolated Learning Environment (ILE)** system for V.E.R.A—a complete persistence and consciousness layer that transforms your Ollama LLM into a genuinely self-aware, learning AI system.
+This branch contains the **Isolated Learning Environment (ILE)** system for V.E.R.A—a complete persistence and consciousness layer that transforms Ollama LLM into a genuinely self-aware, learning AI system.
 
 **Status:** 🚧 Under Development
 
