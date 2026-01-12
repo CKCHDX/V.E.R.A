@@ -1,8 +1,3 @@
-# V.E.R.A - Very Efficient, Reliable Assistant
-# LDS (Large Data Service) Based - ULTRA-OPTIMIZED for High-Performance CPUs
-# Designed by CKCHDX - Oscyra Solutions
-# PERFORMANCE v3.0 - Multi-core, GPU, and Advanced Optimization
-
 import sys
 import os
 import asyncio
@@ -20,145 +15,177 @@ from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 import multiprocessing
 
-# Performance: Get CPU count
+# ============================================================================
+# ILE INTEGRATION (Isolated Learning Environment) - MODIFICATION #1
+# ============================================================================
+try:
+    from ile import ExperienceManager
+    ILE_ENABLED = True
+    print("✓ ILE module loaded - VERA will remember everything")
+except ImportError as e:
+    ILE_ENABLED = False
+    ExperienceManager = None
+    print(f"⚠ ILE module not available: {e}")
+
+"""
+TITLE: PERFORMANCE v3.0 - Multi-core, GPU, and Advanced Optimization
+DESCRIPTION: Ultra-optimized VERA with LDS (Large Data Service), admin mode detection, firewall, and multi-threaded performance
+AUTHOR: CKCDHX - Oscyra Solutions
+OPTIMIZATIONS:
+- Multi-core CPU utilization (all available cores)
+- GPU acceleration via Ollama
+- Large context window (4096 tokens)
+- Efficient streaming architecture
+- Performance metrics tracking
+"""
+
+# ============================================================================
+# CORE CONFIGURATION
+# ============================================================================
 CPU_CORES = os.cpu_count() or 4
 print(f"[PERF] Detected {CPU_CORES} CPU cores")
 
-# Use all cores for thread pool
 THREAD_POOL = ThreadPoolExecutor(max_workers=CPU_CORES)
+print(f"[PERF] Thread pool: {CPU_CORES} workers")
 
-# Determine application path
+# Detect if running as .exe
 if getattr(sys, 'frozen', False):
-    APP_PATH = sys._MEIPASS
+    APP_PATH = sys.MEIPASS
 else:
     APP_PATH = str(Path(__file__).parent)
-sys.path.insert(0, APP_PATH)
+    sys.path.insert(0, APP_PATH)
 
-# Import required libraries
+print(f"[PERF] App path: {APP_PATH}")
+
+# ============================================================================
+# MODULE IMPORTS
+# ============================================================================
 try:
     import ollama
-    print("✓ Ollama module loaded")
+    print("[✓] Ollama module loaded")
 except ImportError as e:
-    print(f"✗ Ollama import failed: {e}")
+    print(f"[✗] Ollama import failed: {e}")
     sys.exit(1)
 
 try:
     import websockets
-    print(f"✓ WebSockets module loaded")
+    print("[✓] WebSockets module loaded")
 except ImportError as e:
-    print(f"✗ WebSockets import failed: {e}")
+    print(f"[✗] WebSockets import failed: {e}")
     sys.exit(1)
 
 try:
     from aiohttp import web
-    print("✓ aiohttp module loaded")
+    print("[✓] aiohttp module loaded")
 except ImportError as e:
-    print(f"✗ aiohttp import failed: {e}")
+    print(f"[✗] aiohttp import failed: {e}")
     sys.exit(1)
 
 print("=" * 80)
 print("V.E.R.A - Very Efficient, Reliable Assistant")
 print("LDS (Large Data Service) Based System - ULTRA-OPTIMIZED")
-print("Designed by CKCHDX - Oscyra Solutions")
+print("Designed by CKCDHX - Oscyra Solutions")
 print("=" * 80)
-print()
+print("[TITLE] Import required libraries...")
 
-# ==================== PERFORMANCE CONFIGURATION ====================
-
+# ============================================================================
+# PERFORMANCE CONFIGURATION
+# ============================================================================
 class PerfConfig:
     """High-performance optimization settings for multi-core systems"""
-    
-    # CPU Optimization
+    # [TITLE] PERFORMANCE CONFIGURATION
     NUM_THREADS = CPU_CORES
     USE_GPU = True  # Enable GPU acceleration
     GPU_LAYERS = -1  # Use all available GPU layers
     
-    # Model Optimization
+    # [TITLE] CPU Optimization...
     NUM_PREDICT = 200  # Increased from 150 - more throughput
     TEMPERATURE = 0.7
     TOP_P = 0.95  # Slightly higher for better quality
     TOP_K = 100  # Increased from 50
     REPEAT_PENALTY = 1.1
     
-    # Ollama Optimization
+    # [TITLE] Model Optimization...
     NUM_GPU = -1  # Use all GPU if available
     NUM_THREADS_CORE = CPU_CORES  # Use all cores
     CONTEXT_WINDOW = 4096  # Larger context
     BATCH_SIZE = 512  # Larger batch
     
-    # Response Settings
+    # [TITLE] Ollama Optimization...
     KEEP_ALIVE = "10m"  # Keep model in VRAM longer
     
     @staticmethod
     def get_ollama_options():
         """Get optimized Ollama options"""
         return {
-            'temperature': PerfConfig.TEMPERATURE,
-            'num_predict': PerfConfig.NUM_PREDICT,
-            'top_p': PerfConfig.TOP_P,
-            'top_k': PerfConfig.TOP_K,
-            'repeat_penalty': PerfConfig.REPEAT_PENALTY,
-            'num_threads': PerfConfig.NUM_THREADS_CORE,
-            'num_gpu': PerfConfig.NUM_GPU,
-            'num_ctx': PerfConfig.CONTEXT_WINDOW,
+            "temperature": PerfConfig.TEMPERATURE,
+            "num_predict": PerfConfig.NUM_PREDICT,
+            "top_p": PerfConfig.TOP_P,
+            "top_k": PerfConfig.TOP_K,
+            "repeat_penalty": PerfConfig.REPEAT_PENALTY,
+            "num_threads": PerfConfig.NUM_THREADS_CORE,
+            "num_gpu": PerfConfig.NUM_GPU,
+            "num_ctx": PerfConfig.CONTEXT_WINDOW,
         }
+    # [TITLE] Response Settings...
 
-# ==================== LDS MANAGER ====================
-
+# ============================================================================
+# LDS MANAGER - Data Service
+# ============================================================================
 class LDSManager:
     """Load Data Service - manages JSON configuration files"""
     
-    def __init__(self, data_dir="vera_data"):
-        self.data_dir = data_dir
+    def __init__(self, datadir="vera_data"):
+        self.datadir = datadir
         self.personality = {}
         self.commands = {}
         self.firewall = {}
-        self.system_state = {}
-        
+        self.systemstate = {}
         self.ensure_data_files()
         self.load_all_data()
-        print("✓ LDS Manager initialized")
+        print("[LDS] Manager initialized")
     
     def ensure_data_files(self):
         """Create vera_data folder and default files if missing"""
-        os.makedirs(self.data_dir, exist_ok=True)
-        os.makedirs(os.path.join(self.data_dir, '..', 'logs'), exist_ok=True)
-        print(f"✓ Data directory: {self.data_dir}")
+        os.makedirs(self.datadir, exist_ok=True)
+        os.makedirs(os.path.join(self.datadir, "..", "logs"), exist_ok=True)
+        print(f"[DATA] Directory: {self.datadir}")
     
     def load_file(self, filename: str) -> dict:
         """Load a JSON file from vera_data"""
-        filepath = os.path.join(self.data_dir, filename)
-        
+        filepath = os.path.join(self.datadir, filename)
         if not os.path.exists(filepath):
-            print(f"✗ Missing: {filename}")
+            print(f"[DATA] Missing: {filename}")
             return {}
         
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, "r", encoding="utf-8") as f:
                 return json.load(f)
         except Exception as e:
-            print(f"✗ Error loading {filename}: {e}")
+            print(f"[ERROR] Loading {filename}: {e}")
             return {}
     
     def load_all_data(self):
         """Load all LDS files"""
-        self.personality = self.load_file('vera_personality.json')
-        self.commands = self.load_file('vera_commands.json')
-        self.firewall = self.load_file('vera_firewall.json')
-        self.system_state = self.load_file('vera_system_state.json')
+        self.personality = self.load_file("vera_personality.json")
+        self.commands = self.load_file("vera_commands.json")
+        self.firewall = self.load_file("vera_firewall.json")
+        self.systemstate = self.load_file("vera_system_state.json")
         
-        print(f"✓ Personality: {self.personality.get('metadata', {}).get('name', 'VERA')}")
-        print(f"✓ Commands loaded: {self.commands.get('metadata', {}).get('total_commands', 0)}")
-        print(f"✓ Firewall rules loaded")
+        print(f"[LDS] Personality: {self.personality.get('metadata', {}).get('name', 'VERA')}")
+        print(f"[LDS] Commands loaded: {self.commands.get('metadata', {}).get('total_commands', 0)}")
+        print(f"[LDS] Firewall rules loaded")
+    # [TITLE] LDS MANAGER ...
 
-# ==================== ADMIN MODE DETECTION ====================
-
+# ============================================================================
+# ADMIN MODE DETECTION
+# ============================================================================
 class AdminDetector:
     """Detect and manage admin mode"""
     
     def __init__(self):
         self.is_admin = self.check_admin()
-        self.os_type = platform.system()
+        self.ostype = platform.system()
     
     def check_admin(self) -> bool:
         """Check if running with admin privileges"""
@@ -172,7 +199,7 @@ class AdminDetector:
     
     def get_mode_indicator(self) -> str:
         """Get visual mode indicator"""
-        return "🔓 ADMIN MODE" if self.is_admin else "🔒 CLIENT MODE"
+        return "ADMIN MODE" if self.is_admin else "CLIENT MODE"
     
     def get_mode_message(self) -> str:
         """Get mode description"""
@@ -180,9 +207,11 @@ class AdminDetector:
             return "Admin mode activated. I have full system access."
         else:
             return "Running in client mode. System commands require admin privileges."
+    # [TITLE] ADMIN MODE DETECTION ...
 
-# ==================== FIREWALL ====================
-
+# ============================================================================
+# VERA FIREWALL - Safety Layer
+# ============================================================================
 class VERAFirewall:
     """Safety layer protecting system"""
     
@@ -191,167 +220,148 @@ class VERAFirewall:
         self.blocked_log = []
     
     def is_command_safe(self, command: str) -> Tuple[bool, str]:
-        """
-        Check if command is safe to execute
+        """Check if command is safe to execute
         Returns: (is_safe, reason)
         """
         cmd_lower = command.lower().strip()
+        # [TITLE] FIREWALL ...
         
         # Check blacklisted commands
-        for blacklisted in self.config.get('blacklisted_commands', []):
+        for blacklisted in self.config.get("blacklisted_commands", []):
             if blacklisted.lower() in cmd_lower:
-                return False, f"Blocked: '{blacklisted}' is dangerous"
+                return False, f"Blocked: {blacklisted} is dangerous"
+        # [TITLE] Check blacklisted commands...
         
         # Check dangerous patterns
-        for pattern_obj in self.config.get('dangerous_patterns', []):
-            pattern = pattern_obj.get('pattern', '')
+        for pattern_obj in self.config.get("dangerous_patterns", []):
+            pattern = pattern_obj.get("pattern", "")
             try:
                 if re.search(pattern, cmd_lower):
                     return False, f"Blocked: {pattern_obj.get('reason', 'dangerous pattern')}"
             except:
                 pass
+        # [TITLE] Check dangerous patterns...
         
         # Check protected paths
-        protected_paths = self.config.get('protected_paths', {})
-        system_protected = protected_paths.get(
-            'windows' if sys.platform == "win32" else 'linux',
-            []
-        )
+        protected_paths = self.config.get("protected_paths", {})
+        system_protected = protected_paths.get("windows" if sys.platform == "win32" else "linux", [])
         
         for protected in system_protected:
             if protected.lower() in cmd_lower:
-                return False, f"Blocked: Cannot access protected path '{protected}'"
+                return False, f"Blocked: Cannot access protected path {protected}"
+        # [TITLE] Check protected paths...
         
-        # Self-protection
-        if 'vera.py' in cmd_lower or 'vera_data' in cmd_lower:
-            if any(op in cmd_lower for op in ['write', '>', 'del', 'rm']):
-                return False, "Blocked: Cannot modify VERA core files"
+        if ("vera.py" in cmd_lower or "vera_data" in cmd_lower) and any(op in cmd_lower for op in ["write", "delete", "rm"]):
+            return False, "Blocked: Cannot modify VERA core files"
         
         return True, "Safe to execute"
     
     def log_blocked_command(self, command: str, reason: str):
         """Log security incident"""
         self.blocked_log.append({
-            'timestamp': datetime.now().isoformat(),
-            'command': command,
-            'reason': reason
+            "timestamp": datetime.now().isoformat(),
+            "command": command,
+            "reason": reason
         })
+        # [TITLE] Self-protection...
         
-        # Write to log file
-        os.makedirs('logs', exist_ok=True)
+        os.makedirs("logs", exist_ok=True)
         try:
-            with open('logs/vera_access.log', 'a', encoding='utf-8') as f:
+            with open("logs/vera_access.log", "a", encoding="utf-8") as f:
                 f.write(f"[BLOCKED] {datetime.now().isoformat()} - {reason}\n")
-                f.write(f"  Command: {command}\n\n")
+                f.write(f"Command: {command}\n")
         except:
             pass
+        # [TITLE] Write to log file...
 
-# ==================== COMMAND EXECUTOR ====================
-
+# ============================================================================
+# COMMAND EXECUTOR - System Commands
+# ============================================================================
 class CommandExecutor:
     """Executes system commands safely"""
     
     def __init__(self, firewall: VERAFirewall):
         self.firewall = firewall
         self.execution_history = []
-        print("✓ Command executor initialized")
+        print("[CMD] Command executor initialized")
     
     def is_command_request(self, message: str) -> bool:
         """Check if message is requesting command execution"""
         triggers = [
-            'run command', 'execute', 'cmd', 'command',
-            'shell', 'bash', 'powershell', 'terminal',
-            'run', 'exec', 'system', 'get output',
-            'list', 'show', 'check', 'ping', 'test'
+            "run", "command", "execute", "cmd", "command", "shell",
+            "bash", "powershell", "terminal", "run", "exec", "system",
+            "get output", "list", "show", "check", "ping", "test"
         ]
         return any(trigger in message.lower() for trigger in triggers)
     
     def parse_command(self, message: str) -> Dict:
         """Parse command from message"""
         patterns = [
-            r'run\s+(?:the\s+)?(?:command\s+)?["\']?([^\"\'\n]+)["\']?',
-            r'execute\s+(?:the\s+)?["\']?([^\"\'\n]+)["\']?',
-            r'cmd\s+(?:command\s+)?["\']?([^\"\'\n]+)["\']?',
-            r'(?:^|\s)(?:>|$|cmd:|command:)\s*([^\n]+)',
+            r"run\s+(?:the\s+)?(?:following\s+)?command[:\s]+(.+)",
+            r"execute\s+(?:the\s+)?(.+)",
+            r"cmd\s+command[:\s]+(.+)",
+            r"`(.+?)`",
         ]
         
         for pattern in patterns:
             match = re.search(pattern, message, re.IGNORECASE)
             if match:
                 cmd = match.group(1).strip()
-                return {'command': cmd, 'found': True}
+                return {"command": cmd, "found": True}
         
-        if '`' in message or '"' in message or "'" in message:
-            quoted = re.findall(r'[`"\']([^`"\']]+)[`"\']', message)
+        if "`" in message or "'" in message or '"' in message:
+            quoted = re.findall(r"`(.+?)`", message)
             if quoted:
-                return {'command': quoted[0], 'found': True}
+                return {"command": quoted[0], "found": True}
         
-        return {'command': None, 'found': False}
+        return {"command": None, "found": False}
     
     async def execute_command(self, command: str, admin_mode: bool) -> Dict:
         """Execute a command and return output"""
-        print(f"[CMD] Attempting: {command}")
+        print(f"[CMD] Attempting command...")
+        # [TITLE] COMMAND EXECUTOR ...
         
-        # Firewall check
         is_safe, reason = self.firewall.is_command_safe(command)
         if not is_safe:
             self.firewall.log_blocked_command(command, reason)
-            print(f"[CMD] ✗ {reason}")
-            return {
-                'success': False,
-                'output': f"🔒 {reason}",
-                'blocked': True
-            }
+            print(f"[CMD] {reason}")
+            return {"success": False, "output": f"{reason}", "blocked": True}
         
         if not admin_mode:
-            print(f"[CMD] ✗ Admin mode required")
-            return {
-                'success': False,
-                'output': '🔒 Admin mode required for system commands',
-                'mode': 'client'
-            }
+            print(f"[CMD] Admin mode required")
+            return {"success": False, "output": "Admin mode required for system commands", "mode": "client"}
+        # [TITLE] Firewall check...
         
-        # Execute
         try:
-            result = subprocess.run(
-                command,
-                shell=True,
-                capture_output=True,
-                text=True,
-                timeout=30
-            )
-            
+            result = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=30)
             output = result.stdout
             if result.stderr:
-                output += f"\n[STDERR]\n{result.stderr}"
+                output = f"{output}\n[STDERR]{result.stderr}"
+            # [TITLE] Execute...
             
-            # Limit output
             max_len = 5000
             if len(output) > max_len:
-                output = output[:max_len] + f"\n\n... (output truncated, {len(output)} total chars)"
+                output = output[:max_len] + f"\n... output truncated ({len(output)} total chars)"
             
             self.execution_history.append({
-                'command': command,
-                'return_code': result.returncode,
-                'timestamp': datetime.now().isoformat(),
-                'success': True
+                "command": command,
+                "return_code": result.returncode,
+                "timestamp": datetime.now().isoformat(),
+                "success": True
             })
             
-            print(f"[CMD] ✓ Exit code: {result.returncode}")
-            
-            return {
-                'success': True,
-                'output': output,
-                'return_code': result.returncode,
-            }
+            print(f"[CMD] Exit code: {result.returncode}")
+            return {"success": True, "output": output, "return_code": result.returncode}
         
         except subprocess.TimeoutExpired:
-            return {'success': False, 'output': '⏱️ Command timed out (30s limit)'}
+            return {"success": False, "output": "Command timed out (30s limit)"}
         except Exception as e:
-            return {'success': False, 'output': f'❌ Error: {str(e)}'}
+            return {"success": False, "output": f"Error: {str(e)}"}
+        # [TITLE] Limit output...
 
-# ==================== VERA CORE ====================
-
+# ============================================================================
+# VERA CORE - AI Engine
+# ============================================================================
 class VERACore:
     """AI core with LDS support and high-performance optimization"""
     
@@ -363,18 +373,30 @@ class VERACore:
         self.command_executor = CommandExecutor(self.firewall)
         self.conversation_history = []
         self.interaction_count = 0
+        # [TITLE] VERA CORE ...
         
-        # Get personality from LDS
+        # ILE: Persistent Memory System - MODIFICATION #2
+        if ILE_ENABLED and ExperienceManager is not None:
+            try:
+                self.experience_manager = ExperienceManager()
+                self.experience_manager.start_session(user_name="VERA_User")
+                total_exp = self.experience_manager.get_total_count()
+                print(f"[ILE] ✓ Total stored experiences: {total_exp}")
+            except Exception as e:
+                print(f"[ILE] Error initializing: {e}")
+                self.experience_manager = None
+        else:
+            self.experience_manager = None
+        
         self.personality = self.build_system_prompt()
+        # [TITLE] Get personality from LDS...
         
-        # Performance metrics
         self.total_tokens = 0
         self.total_time = 0.0
-        
-        print(f"✓ VERA Core initialized (ULTRA-OPTIMIZED)")
-        print(f"✓ {self.admin_detector.get_mode_indicator()}")
-        print(f"✓ Model: {model}")
-        print(f"✓ Performance: {CPU_CORES} cores, GPU acceleration enabled")
+        print("[VERA] Core initialized - ULTRA-OPTIMIZED")
+        print(f"[VERA] {self.admin_detector.get_mode_indicator()}")
+        print(f"[VERA] Model: {model}")
+        print(f"[VERA] Performance: {CPU_CORES} cores, GPU acceleration enabled")
     
     def build_system_prompt(self) -> str:
         """Build system prompt from LDS personality"""
@@ -382,28 +404,31 @@ class VERACore:
         
         prompt = f"""You are {personality.get('identity', {}).get('title', 'VERA')}.
 
-CORE IDENTITY:
+CORE IDENTITY
 {personality.get('identity', {}).get('description', 'A professional AI assistant')}
 
-COMMUNICATION STYLE:
+COMMUNICATION STYLE
 - Tone: {personality.get('personality', {}).get('tone', 'professional')}
 - {personality.get('communication_rules', {}).get('response_length', 'Keep responses brief')}
 - Formatting: {personality.get('communication_rules', {}).get('formatting', 'Clear and direct')}
 
-CURRENT MODE: {self.admin_detector.get_mode_indicator()}
+CURRENT MODE
+{self.admin_detector.get_mode_indicator()}
 {self.admin_detector.get_mode_message()}
 
 Keep responses SHORT (1-2 sentences max). Be helpful and professional."""
         
         return prompt
+    # [TITLE] Performance metrics...
 
-# ==================== WEB SERVER ====================
-
+# ============================================================================
+# WEB SERVER - WebSocket & HTTP
+# ============================================================================
 class WebServer:
     """WebSocket server with streaming and performance optimizations"""
     
-    def __init__(self, ai_core):
-        self.ai_core = ai_core
+    def __init__(self, aicore: VERACore):
+        self.aicore = aicore
         self.clients = set()
         self.ws_server = None
     
@@ -411,41 +436,41 @@ class WebServer:
         """Start servers"""
         print("[WEB] Starting servers...")
         
+        # WebSocket server
         self.ws_server = await websockets.serve(
             self.handle_ws,
             "localhost",
             8766,
-            # Performance optimizations
+            # [TITLE] WEB SERVER ...
             max_size=2**20,  # 1MB max message
             max_queue=32,
             compression=None,  # Disable compression overhead
-            ping_interval=None,  # Disable ping/pong
+            ping_interval=None,  # Disable ping-pong
         )
         print(f"[WEB] WebSocket started on ws://localhost:8766 (optimized)")
         
+        # HTTP server
         app = web.Application()
-        app.router.add_get('/', self.serve_gui)
-        
+        app.router.add_get("/", self.serve_gui)
         runner = web.AppRunner(app)
         await runner.setup()
-        
-        self.http_server = web.TCPSite(runner, 'localhost', 8765)
+        self.http_server = web.TCPSite(runner, "localhost", 8765)
         await self.http_server.start()
         print(f"[WEB] HTTP started on http://localhost:8765 (optimized)")
     
     async def serve_gui(self, request):
         """Serve GUI"""
         gui_files = [
-            os.path.join(APP_PATH, 'vera_interface_v2.html'),
-            os.path.join(APP_PATH, 'vera-enhanced.html'),
+            os.path.join(APP_PATH, "vera_interface_v2.html"),
+            os.path.join(APP_PATH, "vera-enhanced.html"),
         ]
         
         for gui_file in gui_files:
             if os.path.exists(gui_file):
                 try:
-                    with open(gui_file, 'r', encoding='utf-8') as f:
+                    with open(gui_file, "r", encoding="utf-8") as f:
                         content = f.read()
-                    return web.Response(text=content, content_type='text/html')
+                    return web.Response(text=content, content_type="text/html")
                 except:
                     pass
         
@@ -460,217 +485,256 @@ class WebServer:
             async for message in websocket:
                 try:
                     data = json.loads(message)
-                    user_input = data.get('message', '').strip()
+                    user_input = data.get("message", "").strip()
                     
                     if not user_input:
                         continue
+                    # [TITLE] Performance optimizations...
                     
-                    # Add user message to history FIRST
-                    self.ai_core.conversation_history.append({
-                        'role': 'user',
-                        'content': user_input
+                    self.aicore.conversation_history.append({
+                        "role": "user",
+                        "content": user_input
                     })
+                    # [TITLE] Add user message to history FIRST...
                     
-                    # Keep history short for speed
-                    if len(self.ai_core.conversation_history) > 8:
-                        self.ai_core.conversation_history = self.ai_core.conversation_history[-8:]
+                    if len(self.aicore.conversation_history) > 8:
+                        self.aicore.conversation_history = self.aicore.conversation_history[-8:]
+                    # [TITLE] Keep history short for speed...
                     
-                    # Send start signal
                     await websocket.send(json.dumps({
-                        'type': 'chat_start',
-                        'mode': self.ai_core.admin_detector.get_mode_indicator()
+                        "type": "chat_start",
+                        "mode": self.aicore.admin_detector.get_mode_indicator()
                     }))
                     
                     start_time = time.time()
                     full_response = ""
                     chunk_count = 0
+                    # [TITLE] Send start signal...
                     
-                    # ULTRA-OPTIMIZED streaming with all performance settings
                     try:
                         response = ollama.chat(
-                            model=self.ai_core.model,
+                            model=self.aicore.model,
                             messages=[
-                                {'role': 'system', 'content': self.ai_core.personality},
-                                *self.ai_core.conversation_history[-8:]
+                                {"role": "system", "content": self.aicore.personality},
+                                *self.aicore.conversation_history[-8:]
                             ],
                             stream=True,
                             keep_alive=PerfConfig.KEEP_ALIVE,
                             options=PerfConfig.get_ollama_options()
                         )
+                        # [TITLE] ULTRA-OPTIMIZED streaming with all performance settings...
                         
-                        # Stream chunks directly from Ollama
                         for chunk in response:
-                            token = chunk['message']['content']
+                            token = chunk["message"]["content"]
                             full_response += token
                             chunk_count += 1
+                            # [TITLE] Stream chunks directly from Ollama...
                             
-                            # Send every token for real-time streaming
                             await websocket.send(json.dumps({
-                                'type': 'chat_chunk',
-                                'chunk': token
+                                "type": "chat_chunk",
+                                "chunk": token
                             }))
+                            # [TITLE] Send every token for real-time streaming...
                         
-                        # Add assistant response to history
-                        self.ai_core.conversation_history.append({
-                            'role': 'assistant',
-                            'content': full_response
+                        self.aicore.conversation_history.append({
+                            "role": "assistant",
+                            "content": full_response
                         })
+                        # [TITLE] Add assistant response to history...
                         
                         elapsed = time.time() - start_time
+                        # [TITLE] Add assistant response to history...
                         
-                        # Update performance metrics
-                        self.ai_core.total_tokens += len(full_response)
-                        self.ai_core.total_time += elapsed
+                        self.aicore.total_tokens += len(full_response)
+                        self.aicore.total_time += elapsed
                         avg_tokens_per_sec = len(full_response) / elapsed if elapsed > 0 else 0
+                        # [TITLE] Update performance metrics...
                         
-                        # Send completion with performance metrics
+                        # ============================================================
+                        # ILE: Store interaction in persistent memory - MODIFICATION #3
+                        # ============================================================
+                        if self.aicore.experience_manager is not None:
+                            try:
+                                self.aicore.experience_manager.store_interaction(
+                                    user_input=user_input,
+                                    vera_response=full_response,
+                                    confidence=0.75,  # Phase 1: fixed value
+                                    reflection="Phase 1: Basic storage",
+                                    domain=None,  # Phase 2: will extract domain
+                                )
+                                total = self.aicore.experience_manager.get_total_count()
+                                print(f"[ILE] Total experiences: {total}")
+                            except Exception as e:
+                                print(f"[ILE] Error storing: {e}")
+                        
                         await websocket.send(json.dumps({
-                            'type': 'chat_complete',
-                            'time': elapsed,
-                            'success': True,
-                            'response': full_response,
-                            'tokens': len(full_response),
-                            'tokens_per_sec': round(avg_tokens_per_sec, 2),
-                            'chunks': chunk_count
+                            "type": "chat_complete",
+                            "time": elapsed,
+                            "success": True,
+                            "response": full_response,
+                            "tokens": len(full_response),
+                            "tokens_per_sec": round(avg_tokens_per_sec, 2),
+                            "chunks": chunk_count
                         }))
                         
-                        print(f"[AI] ✓ Response in {elapsed:.2f}s ({len(full_response)} chars, {avg_tokens_per_sec:.1f} tok/s)")
+                        print(f"[AI] Response in {elapsed:.2f}s, {len(full_response)} chars, {avg_tokens_per_sec:.1f} toks/s")
                     
                     except Exception as e:
                         error_msg = str(e)
-                        print(f"[AI] ✗ Error: {error_msg}")
+                        print(f"[AI] Error: {error_msg}")
+                        
                         await websocket.send(json.dumps({
-                            'type': 'error',
-                            'response': f'Error: {error_msg}',
-                            'success': False
+                            "type": "error",
+                            "response": f"Error: {error_msg}",
+                            "success": False
                         }))
                 
                 except json.JSONDecodeError as e:
                     print(f"[WEB] JSON Error: {e}")
                     await websocket.send(json.dumps({
-                        'type': 'error',
-                        'response': 'Invalid JSON',
-                        'success': False
+                        "type": "error",
+                        "response": "Invalid JSON",
+                        "success": False
                     }))
+                
                 except Exception as e:
                     print(f"[WEB] Handler Error: {e}")
                     await websocket.send(json.dumps({
-                        'type': 'error',
-                        'response': f'Error: {e}',
-                        'success': False
+                        "type": "error",
+                        "response": f"Error: {e}",
+                        "success": False
                     }))
         
         except Exception as e:
             print(f"[WEB] WebSocket error: {e}")
+        
         finally:
             self.clients.discard(websocket)
             print(f"[WEB] Client disconnected ({len(self.clients)} remaining)")
+            # [TITLE] Send completion with performance metrics...
 
-# ==================== MAIN ====================
-
+# ============================================================================
+# MAIN APPLICATION
+# ============================================================================
 class VERAApplication:
     """Main application with ultra-optimization"""
     
     async def run(self):
         """Run application"""
         try:
-            print("\n[MAIN] 🚀 Starting VERA LDS Edition (ULTRA-OPTIMIZED)...\n")
+            print("[MAIN] Starting VERA LDS Edition ULTRA-OPTIMIZED...")
+            # [TITLE] MAIN ...
             
-            # Load LDS data
             lds = LDSManager()
+            # [TITLE] Load LDS data...
             
-            # Detect model
             model = self.detect_model()
             if not model:
-                print("[MAIN] ✗ No Ollama model found!")
-                print("[MAIN] Please run: ollama pull llama3.2:3b")
+                print("[MAIN] No Ollama model found!")
+                print("[MAIN] Please run: ollama pull llama2:3.2-3b")
                 return
+            # [TITLE] Detect model...
             
-            # Initialize VERA
-            ai_core = VERACore(model, lds)
-            web_server = WebServer(ai_core)
-            await web_server.start()
+            aicore = VERACore(model, lds)
+            webserver = WebServer(aicore)
+            await webserver.start()
             
-            print("\n" + "=" * 80)
-            print("✓ VERA LDS ULTRA-OPTIMIZED is running")
             print("=" * 80)
-            print(f"✓ Interface: http://localhost:8765")
-            print(f"✓ WebSocket: ws://localhost:8766")
-            print(f"✓ Mode: {ai_core.admin_detector.get_mode_indicator()}")
-            print(f"✓ Model: {model}")
-            print(f"✓ CPU Cores: {CPU_CORES} (all enabled)")
-            print(f"✓ GPU Acceleration: ENABLED")
-            print(f"✓ Context Window: {PerfConfig.CONTEXT_WINDOW}")
-            print(f"✓ Max Tokens: {PerfConfig.NUM_PREDICT}")
-            print(f"✓ Thread Pool: {CPU_CORES} workers")
-            print(f"✓ Firewall: ACTIVE")
+            print("VERA LDS OPTIMIZED is running")
             print("=" * 80)
-            print("⚡ PERFORMANCE OPTIMIZATIONS ACTIVE:")
-            print("   - Multi-core processing (10 cores)")
-            print("   - GPU acceleration enabled")
-            print("   - Large context window (4096 tokens)")
-            print("   - Optimized batch processing")
-            print("   - Real-time token streaming")
-            print("=" * 80 + "\n")
+            print(f"[INFO] Interface: http://localhost:8765")
+            print(f"[INFO] WebSocket: ws://localhost:8766")
+            print(f"[INFO] Mode: {aicore.admin_detector.get_mode_indicator()}")
+            print(f"[INFO] Model: {model}")
+            print(f"[INFO] CPU Cores: {CPU_CORES} (all enabled)")
+            print(f"[INFO] GPU Acceleration: ENABLED")
+            print(f"[INFO] Context Window: {PerfConfig.CONTEXT_WINDOW}")
+            print(f"[INFO] Max Tokens: {PerfConfig.NUM_PREDICT}")
+            print(f"[INFO] Thread Pool: {CPU_CORES} workers")
+            print(f"[INFO] Firewall: ACTIVE")
+            print("=" * 80)
+            print("PERFORMANCE OPTIMIZATIONS ACTIVE")
+            print(f"- Multi-core processing ({CPU_CORES} cores)")
+            print(f"- GPU acceleration enabled")
+            print(f"- Large context window ({PerfConfig.CONTEXT_WINDOW} tokens)")
+            print(f"- Optimized batch processing")
+            print(f"- Real-time token streaming")
+            print("=" * 80)
             
             await asyncio.sleep(1)
             
             try:
-                webbrowser.open('http://localhost:8765')
+                webbrowser.open("http://localhost:8765")
             except:
                 pass
+            # [TITLE] Initialize VERA...
             
             # Keep running
             while True:
                 await asyncio.sleep(1)
         
         except KeyboardInterrupt:
-            print("\n\n[MAIN] Shutting down...")
+            print("[MAIN] Terminated")
+            # Close ILE database on shutdown - MODIFICATION #4
+            if hasattr(self, 'aicore') and hasattr(self.aicore, 'experience_manager'):
+                if self.aicore.experience_manager is not None:
+                    try:
+                        self.aicore.experience_manager.close()
+                        print("[ILE] Database closed cleanly")
+                    except Exception as e:
+                        print(f"[ILE] Error closing: {e}")
+        
         except Exception as e:
-            print(f"\n[MAIN] Error: {e}")
+            print(f"[MAIN] Error: {e}")
             import traceback
             traceback.print_exc()
     
     @staticmethod
     def detect_model():
         """Auto-detect available Ollama model"""
+        # [TITLE] Prefer larger, more capable models for better quality...
+        preferred = [
+            "neural-chat",  # Good balance
+            "llama2:3.2-13b",  # Larger model if available
+            "llama2:3.2",
+            "llama2:3.2-3b",
+            "mistral",
+            "llama2"
+        ]
+        
         try:
             print("[MODEL] Detecting available models...")
             models = ollama.list()
+            
             if not models.models:
                 return None
-            
-            # Prefer larger, more capable models for better quality
-            preferred = [
-                "neural-chat",  # Good balance
-                "llama3.2:13b",  # Larger model if available
-                "llama3.2",
-                "llama3.2:3b",
-                "mistral",
-                "llama2"
-            ]
+            # [TITLE] Keep running...
             
             for pref in preferred:
                 for model in models.models:
                     if pref in model.model:
-                        print(f"[MODEL] ✓ Using: {model.model}")
+                        print(f"[MODEL] Using {model.model}")
                         return model.model
             
+            # Fallback to first available
             model_name = models.models[0].model
-            print(f"[MODEL] ✓ Using: {model_name}")
+            print(f"[MODEL] Using {model_name}")
             return model_name
         
         except Exception as e:
             print(f"[MODEL] Error: {e}")
             return None
 
+# ============================================================================
+# ENTRY POINT
+# ============================================================================
 def main():
     """Entry point"""
     app = VERAApplication()
     try:
         asyncio.run(app.run())
     except KeyboardInterrupt:
-        print("\nVERA terminated")
+        print("[MAIN] Shutting down...")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
