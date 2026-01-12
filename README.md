@@ -1,4 +1,4 @@
-# V.E.R.A ILE (Isolated Learning Environment) - Development Branch
+# V.E.R.A ILE (Isolated Learning Environment)
 
 ![V.E.R.A ILE Architecture](ILE-SA.png)
 
