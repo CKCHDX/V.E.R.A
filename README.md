@@ -1,6 +1,6 @@
 # V.E.R.A ILE (Isolated Learning Environment) - Development Branch
 
-![V.E.R.A ILE Architecture](vera_ile_architecture.png)
+![V.E.R.A ILE Architecture](ILE-SA.png)
 
 ## 🎯 Branch Purpose
 
