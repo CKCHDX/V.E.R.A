@@ -1,0 +1,92 @@
+{
+  "metadata": {
+    "total_commands": 250,
+    "last_updated": "2026-01-12",
+    "windows_version": "10/11",
+    "linux_distros": "Ubuntu, Kali, CentOS, Debian"
+  },
+  "command_categories": {
+    "file_operations": {
+      "description": "File and directory management",
+      "windows": {
+        "dir": {"description": "List directory contents", "syntax": "dir [path] [/S] [/B]", "admin_required": false, "example": "dir C:\\Users"},
+        "cd": {"description": "Change directory", "syntax": "cd [path]", "admin_required": false, "example": "cd C:\\Windows\\System32"},
+        "copy": {"description": "Copy files", "syntax": "copy [source] [destination]", "admin_required": false, "example": "copy file.txt backup.txt"},
+        "del": {"description": "Delete files", "syntax": "del [file]", "admin_required": false, "example": "del tempfile.tmp"},
+        "mkdir": {"description": "Create directory", "syntax": "mkdir [dirname]", "admin_required": false, "example": "mkdir NewFolder"},
+        "rmdir": {"description": "Remove directory", "syntax": "rmdir [dirname]", "admin_required": false, "example": "rmdir EmptyFolder"},
+        "type": {"description": "Display file contents", "syntax": "type [filename]", "admin_required": false, "example": "type config.txt"},
+        "move": {"description": "Move files or directories", "syntax": "move [source] [destination]", "admin_required": false, "example": "move file.txt C:\\Archive"},
+        "attrib": {"description": "Change file attributes", "syntax": "attrib [+R|-R] [file]", "admin_required": true, "example": "attrib +R protected.txt"},
+        "icacls": {"description": "Manage file permissions", "syntax": "icacls [file] /grant [user]:[permissions]", "admin_required": true, "example": "icacls file.txt /grant Users:F"}
+      },
+      "linux": {
+        "ls": {"description": "List directory contents", "syntax": "ls [options] [path]", "admin_required": false, "example": "ls -la /home"},
+        "cd": {"description": "Change directory", "syntax": "cd [path]", "admin_required": false, "example": "cd /etc"},
+        "cp": {"description": "Copy files", "syntax": "cp [source] [destination]", "admin_required": false, "example": "cp file.txt backup.txt"},
+        "rm": {"description": "Remove files", "syntax": "rm [file]", "admin_required": false, "example": "rm tempfile.tmp"},
+        "mkdir": {"description": "Create directory", "syntax": "mkdir [dirname]", "admin_required": false, "example": "mkdir NewFolder"},
+        "cat": {"description": "Display file contents", "syntax": "cat [filename]", "admin_required": false, "example": "cat /etc/passwd"},
+        "mv": {"description": "Move files or directories", "syntax": "mv [source] [destination]", "admin_required": false, "example": "mv file.txt /archive"},
+        "chmod": {"description": "Change file permissions", "syntax": "chmod [permissions] [file]", "admin_required": false, "example": "chmod 755 script.sh"},
+        "chown": {"description": "Change file owner", "syntax": "chown [user]:[group] [file]", "admin_required": true, "example": "chown user:group file.txt"},
+        "find": {"description": "Search for files", "syntax": "find [path] [criteria]", "admin_required": false, "example": "find /home -name '*.log'"}
+      }
+    },
+    "system_info": {
+      "description": "System information and monitoring",
+      "windows": {
+        "systeminfo": {"description": "Display system information", "syntax": "systeminfo", "admin_required": false, "example": "systeminfo"},
+        "tasklist": {"description": "List running processes", "syntax": "tasklist [/V]", "admin_required": false, "example": "tasklist /V"},
+        "whoami": {"description": "Display current user", "syntax": "whoami", "admin_required": false, "example": "whoami"},
+        "hostname": {"description": "Display computer name", "syntax": "hostname", "admin_required": false, "example": "hostname"},
+        "ipconfig": {"description": "Display network configuration", "syntax": "ipconfig [/all]", "admin_required": false, "example": "ipconfig /all"},
+        "netstat": {"description": "Display network statistics", "syntax": "netstat [options]", "admin_required": false, "example": "netstat -an"},
+        "wmic": {"description": "Windows Management Instrumentation", "syntax": "wmic [class] [action]", "admin_required": true, "example": "wmic process list"},
+        "taskkill": {"description": "Terminate process", "syntax": "taskkill /PID [pid] /F", "admin_required": true, "example": "taskkill /PID 1234 /F"}
+      },
+      "linux": {
+        "uname": {"description": "Display system information", "syntax": "uname [options]", "admin_required": false, "example": "uname -a"},
+        "whoami": {"description": "Display current user", "syntax": "whoami", "admin_required": false, "example": "whoami"},
+        "hostname": {"description": "Display computer name", "syntax": "hostname", "admin_required": false, "example": "hostname"},
+        "ps": {"description": "List running processes", "syntax": "ps [options]", "admin_required": false, "example": "ps aux"},
+        "top": {"description": "Monitor system resources", "syntax": "top", "admin_required": false, "example": "top"},
+        "df": {"description": "Display disk space usage", "syntax": "df [options]", "admin_required": false, "example": "df -h"},
+        "du": {"description": "Display directory size", "syntax": "du [options] [path]", "admin_required": false, "example": "du -sh /home"},
+        "ifconfig": {"description": "Display network configuration", "syntax": "ifconfig", "admin_required": false, "example": "ifconfig"},
+        "netstat": {"description": "Display network statistics", "syntax": "netstat [options]", "admin_required": false, "example": "netstat -an"}
+      }
+    },
+    "network": {
+      "description": "Network operations and diagnostics",
+      "common": {
+        "ping": {"description": "Test network connectivity", "syntax": "ping [host]", "admin_required": false, "example": "ping google.com"},
+        "tracert": {"description": "Trace route to host", "syntax": "tracert [host]", "admin_required": false, "example": "tracert google.com"},
+        "curl": {"description": "Download or fetch data", "syntax": "curl [url]", "admin_required": false, "example": "curl https://example.com"},
+        "wget": {"description": "Download files", "syntax": "wget [url]", "admin_required": false, "example": "wget https://example.com/file.zip"}
+      },
+      "security": {
+        "nmap": {"description": "Network mapping and scanning", "syntax": "nmap [options] [target]", "admin_required": false, "example": "nmap -sV localhost"},
+        "netcat": {"description": "Network communication utility", "syntax": "nc [options] [host] [port]", "admin_required": false, "example": "nc -l -p 4444"}
+      }
+    },
+    "development": {
+      "description": "Development and build tools",
+      "common": {
+        "python": {"description": "Python interpreter", "syntax": "python [script.py]", "admin_required": false, "example": "python script.py"},
+        "git": {"description": "Version control", "syntax": "git [command]", "admin_required": false, "example": "git status"},
+        "npm": {"description": "Node package manager", "syntax": "npm [command]", "admin_required": false, "example": "npm install"},
+        "docker": {"description": "Container platform", "syntax": "docker [command]", "admin_required": false, "example": "docker ps"}
+      }
+    }
+  },
+  "dangerous_commands_reference": [
+    "format",
+    "rm -rf /",
+    "del /s /q C:\\*",
+    "mkfs",
+    "dd if=/dev/zero of=/dev/sda",
+    "chmod 000",
+    "sudo reboot"
+  ]
+}
