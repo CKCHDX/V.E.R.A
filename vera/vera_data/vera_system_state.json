@@ -97,7 +97,7 @@
   },
   
   "configuration": {
-    "workspace_path": "/home/runner/work/V.E.R.A/V.E.R.A/vera",
+    "workspace_path": "./vera",
     "data_path": "vera_data",
     "logs_path": "logs",
     "kb_path": "knowledge_base",

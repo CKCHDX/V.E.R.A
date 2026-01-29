@@ -18,7 +18,7 @@ import logging
 import platform
 import datetime
 import subprocess
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Tuple
 from pathlib import Path
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 import threading
@@ -100,15 +100,25 @@ class VeraCore:
             "timestamp": datetime.datetime.now().isoformat()
         }
     
-    def check_command_safety(self, command: str) -> tuple[bool, str]:
+    def check_command_safety(self, command: str) -> Tuple[bool, str]:
         """Check if command is safe to execute according to firewall rules"""
         if not self.firewall:
             return True, "No firewall rules loaded"
         
+        # Check for shell metacharacters that could be used for injection
+        shell_metacharacters = [';', '|', '&', '$', '`', '(', ')', '<', '>', '\n', '\r']
+        for char in shell_metacharacters:
+            if char in command:
+                return False, f"Command contains shell metacharacter: {char}"
+        
+        # Extract the base command (first word)
+        cmd_name = command.strip().split()[0] if command.strip() else ""
+        
         blacklist = self.firewall.get("blacklist", [])
         for blocked in blacklist:
-            if blocked.lower() in command.lower():
-                return False, f"Command contains blocked term: {blocked}"
+            # Check if the base command matches the blocked command
+            if cmd_name.lower() == blocked.lower():
+                return False, f"Command '{cmd_name}' is blacklisted"
         
         return True, "Command approved"
     
@@ -138,14 +148,19 @@ class VeraCore:
                     "error": f"Command '{cmd_name}' not in allowed list"
                 }
         
-        # Execute command
+        # Execute command with shell=False for better security
+        # Note: This limits functionality but improves security
         try:
+            # Split command into args for shell=False execution
+            cmd_args = command.split()
+            
             result = subprocess.run(
-                command,
-                shell=True,
+                cmd_args,
+                shell=False,
                 capture_output=True,
                 text=True,
-                timeout=30
+                timeout=30,
+                cwd=self.base_dir  # Restrict to project directory
             )
             
             self.logger.info(f"Command executed: {command}")

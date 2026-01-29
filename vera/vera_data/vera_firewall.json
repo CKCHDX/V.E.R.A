@@ -13,13 +13,14 @@
     "kill", "killall", "pkill",
     "chmod", "chown", "chgrp",
     "sudo", "su",
-    "wget", "curl",
-    "nc", "netcat",
-    "iptables", "firewall",
+    "wget", "curl", "nc", "netcat",
+    "systemctl", "service", "journalctl",
+    "iptables",
     "cron", "at",
     "mount", "umount",
     "fdisk", "parted",
-    "useradd", "userdel", "passwd"
+    "useradd", "userdel", "passwd",
+    "cd"
   ],
   
   "rules": {
@@ -51,7 +52,9 @@
   },
   
   "allowed_directories": [
-    "/home/runner/work/V.E.R.A/V.E.R.A/vera",
+    "./vera",
+    "./vera_data",
+    "./logs",
     "/tmp/vera"
   ],
   
@@ -60,8 +63,14 @@
     "/boot",
     "/sys",
     "/proc",
-    "/root",
-    "/var/log"
+    "/root"
+  ],
+  
+  "notes_about_implementation": [
+    "NOTE: Directory restrictions are defined but not yet enforced in Phase 1",
+    "NOTE: Rate limiting is defined but not yet implemented in Phase 1",
+    "NOTE: Alerts are defined but not yet implemented in Phase 1",
+    "These features are planned for Phase 2 implementation"
   ],
   
   "rate_limiting": {

@@ -3,10 +3,9 @@
   "description": "VERA command library - defines allowed commands and their help documentation",
   
   "allowed": [
-    "ls", "dir", "pwd", "cd", "cat", "type", "echo", "whoami", "hostname",
-    "uname", "date", "uptime", "df", "free", "ps", "top", "netstat",
-    "ifconfig", "ip", "ping", "traceroute", "nslookup", "dig",
-    "systemctl", "service", "journalctl", "dmesg",
+    "ls", "dir", "pwd", "cat", "type", "echo", "whoami", "hostname",
+    "uname", "date", "uptime", "df", "free", "ps", "top",
+    "ifconfig", "ip", "ping", "nslookup", "dig",
     "git", "python", "python3", "pip", "pip3", "node", "npm"
   ],
   
