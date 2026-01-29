@@ -1,0 +1,12 @@
+# V.E.R.A - Versatile Evolving Reasoning Agent
+# Python project requirements
+# Version: 1.0.0-ILE
+
+# Core dependencies
+# (No external dependencies required for basic functionality)
+
+# Optional dependencies for future features:
+# flask>=2.3.0          # For advanced web interface
+# requests>=2.31.0      # For network operations (if enabled)
+# sqlite3               # Built-in, for knowledge base
+# typing-extensions     # Built-in from Python 3.9+

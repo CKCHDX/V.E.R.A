@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V.E.R.A - Versatile Evolving Reasoning Agent</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 1200px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+
+        .status-bar {
+            background: #f8f9fa;
+            padding: 10px 30px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85em;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #28a745;
+        }
+
+        .status-indicator.warning {
+            background: #ffc107;
+        }
+
+        .status-indicator.error {
+            background: #dc3545;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #f8f9fa;
+            border-right: 1px solid #dee2e6;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 15px;
+            color: #495057;
+            font-size: 1em;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .sidebar li:hover {
+            background: #dee2e6;
+        }
+
+        .sidebar li.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            background: #ffffff;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .message.vera .message-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .message-content {
+            flex: 1;
+            max-width: 70%;
+        }
+
+        .message-bubble {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 15px;
+            line-height: 1.6;
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .message-time {
+            font-size: 0.75em;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .input-area {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-container input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #dee2e6;
+            border-radius: 25px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-container input:focus {
+            border-color: #667eea;
+        }
+
+        .input-container button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .input-container button:hover {
+            transform: scale(1.05);
+        }
+
+        .input-container button:active {
+            transform: scale(0.95);
+        }
+
+        .welcome-screen {
+            text-align: center;
+            padding: 50px;
+            color: #6c757d;
+        }
+
+        .welcome-screen h2 {
+            margin-bottom: 20px;
+            color: #495057;
+        }
+
+        .welcome-screen .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #dee2e6;
+        }
+
+        .feature-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+            
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>V.E.R.A</h1>
+            <p>Versatile Evolving Reasoning Agent - ILE Edition</p>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-indicator"></div>
+                <span>System: Operational</span>
+            </div>
+            <div class="status-item">
+                <div class="status-indicator"></div>
+                <span>Firewall: Active</span>
+            </div>
+            <div class="status-item">
+                <div class="status-indicator warning"></div>
+                <span>Learning: Phase 1</span>
+            </div>
+            <div class="status-item">
+                <span>Developer: CKCHDX @ Oscyra Solutions</span>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <h3>Quick Actions</h3>
+                <ul>
+                    <li class="active">Chat</li>
+                    <li>System Status</li>
+                    <li>Command Help</li>
+                    <li>Knowledge Base</li>
+                    <li>Settings</li>
+                </ul>
+
+                <h3 style="margin-top: 30px;">Features</h3>
+                <ul>
+                    <li>✅ Personality System</li>
+                    <li>✅ Command Firewall</li>
+                    <li>✅ Safe Execution</li>
+                    <li>✅ Activity Logging</li>
+                    <li>⏳ Persistent Memory</li>
+                    <li>⏳ Reasoning Engine</li>
+                </ul>
+            </div>
+
+            <div class="chat-area">
+                <div class="messages" id="messages">
+                    <div class="welcome-screen">
+                        <h2>Welcome to V.E.R.A</h2>
+                        <p>I'm your Versatile Evolving Reasoning Agent. I'm designed to learn, reason, and assist you while staying truthful and contained.</p>
+                        
+                        <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 10px; padding: 15px; margin: 20px 0;">
+                            <strong>⚠️ Demo Interface Notice:</strong><br>
+                            This is a demonstration interface with simulated responses. For full functionality, the Python backend must be running with proper API integration (planned for Phase 2).
+                        </div>
+                        
+                        <div class="features">
+                            <div class="feature-card">
+                                <h4>🎯 Truthful</h4>
+                                <p>I verify facts and admit uncertainty rather than guessing</p>
+                            </div>
+                            <div class="feature-card">
+                                <h4>🧠 Learning</h4>
+                                <p>I improve with every interaction and remember what I learn</p>
+                            </div>
+                            <div class="feature-card">
+                                <h4>🔒 Safe</h4>
+                                <p>I operate in a secure sandbox with complete containment</p>
+                            </div>
+                            <div class="feature-card">
+                                <h4>💡 Transparent</h4>
+                                <p>You can see how I think and verify all my claims</p>
+                            </div>
+                        </div>
+
+                        <p style="margin-top: 30px;">Type a message below to start chatting with me!</p>
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <div class="input-container">
+                        <input type="text" id="messageInput" placeholder="Ask me anything or give me a command..." />
+                        <button onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let messageCount = 0;
+
+        function getCurrentTime() {
+            const now = new Date();
+            return now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function addMessage(text, isUser = false) {
+            const messagesContainer = document.getElementById('messages');
+            
+            // Remove welcome screen on first message
+            if (messageCount === 0) {
+                messagesContainer.innerHTML = '';
+            }
+            messageCount++;
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'vera'}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = isUser ? 'U' : 'V';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
+            bubble.textContent = text;
+            
+            const time = document.createElement('div');
+            time.className = 'message-time';
+            time.textContent = getCurrentTime();
+            
+            content.appendChild(bubble);
+            content.appendChild(time);
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessage(message, true);
+                input.value = '';
+                
+                // Simulate VERA response (in production, this would call the Python backend)
+                setTimeout(() => {
+                    const responses = [
+                        "I understand. Let me process that for you.",
+                        "I'm working on your request. This system is currently in Phase 1, so some features are still being developed.",
+                        "Thank you for that input. I'm learning from our interaction.",
+                        "I've logged your request. As I continue to develop, I'll be able to provide more sophisticated responses.",
+                        "That's an interesting query. In my current phase, I can provide basic assistance while maintaining complete transparency about my capabilities."
+                    ];
+                    const response = responses[Math.floor(Math.random() * responses.length)];
+                    addMessage(response, false);
+                }, 1000);
+            }
+        }
+
+        // Allow Enter key to send messages
+        document.getElementById('messageInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Add initial greeting after a short delay
+        setTimeout(() => {
+            console.log('V.E.R.A Interface v2.0 - Ready');
+        }, 500);
+    </script>
+</body>
+</html>
