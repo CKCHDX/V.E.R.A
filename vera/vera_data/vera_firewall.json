@@ -1,0 +1,99 @@
+{
+  "version": "1.0.0",
+  "description": "VERA firewall rules - safety constraints and command blacklist",
+  
+  "enabled": true,
+  "mode": "strict",
+  
+  "blacklist": [
+    "rm", "rmdir", "del", "delete",
+    "format", "mkfs",
+    "dd",
+    "shutdown", "reboot", "halt", "poweroff",
+    "kill", "killall", "pkill",
+    "chmod", "chown", "chgrp",
+    "sudo", "su",
+    "wget", "curl",
+    "nc", "netcat",
+    "iptables", "firewall",
+    "cron", "at",
+    "mount", "umount",
+    "fdisk", "parted",
+    "useradd", "userdel", "passwd"
+  ],
+  
+  "rules": {
+    "no_destructive_operations": {
+      "description": "Prevent file deletion, modification, or system changes",
+      "enabled": true,
+      "severity": "critical"
+    },
+    "no_system_modification": {
+      "description": "Prevent changes to system configuration",
+      "enabled": true,
+      "severity": "critical"
+    },
+    "no_privilege_escalation": {
+      "description": "Prevent attempts to gain elevated privileges",
+      "enabled": true,
+      "severity": "critical"
+    },
+    "no_network_egress": {
+      "description": "Prevent outbound network connections",
+      "enabled": true,
+      "severity": "high"
+    },
+    "no_process_manipulation": {
+      "description": "Prevent killing or modifying other processes",
+      "enabled": true,
+      "severity": "high"
+    }
+  },
+  
+  "allowed_directories": [
+    "/home/runner/work/V.E.R.A/V.E.R.A/vera",
+    "/tmp/vera"
+  ],
+  
+  "blocked_directories": [
+    "/etc",
+    "/boot",
+    "/sys",
+    "/proc",
+    "/root",
+    "/var/log"
+  ],
+  
+  "rate_limiting": {
+    "enabled": true,
+    "max_commands_per_minute": 60,
+    "max_commands_per_hour": 500
+  },
+  
+  "logging": {
+    "log_all_commands": true,
+    "log_blocked_attempts": true,
+    "log_level": "INFO"
+  },
+  
+  "alerts": {
+    "alert_on_blocked_command": true,
+    "alert_on_suspicious_pattern": true,
+    "alert_threshold": 3
+  },
+  
+  "containment": {
+    "sandbox_enabled": true,
+    "restrict_to_workspace": true,
+    "verify_all_paths": true,
+    "timeout_seconds": 30
+  },
+  
+  "notes": [
+    "This firewall enforces V.E.R.A's core safety principle: Complete Containment",
+    "All destructive operations are blocked",
+    "System modification attempts are logged and prevented",
+    "Network egress is controlled to prevent unauthorized communication",
+    "These rules ensure V.E.R.A remains trustworthy and safe"
+  ]
+}
