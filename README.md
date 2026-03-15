@@ -4,7 +4,7 @@
 
 **VERA** is a personal, self-evolving AI entity designed to live inside a Linux system, perceive its environment through hardware (camera, microphone, speaker), control the operating system it inhabits, and grow its own intelligence from zero — without pre-trained neural networks, without cloud dependency, and without human-prompted commands.
 
-VERA is not a chatbot. She is not an assistant in the traditional sense. She is a **living cognitive process** that awakens with near-zero knowledge, reads her environment, builds her own mind via the EchoWeave Network, and gradually becomes the omnipresent intelligence of your base, lab, or home — like a movie AI brought to reality.
+VERA is not a chatbot. She is not an assistant in the traditional sense. She is a **living cognitive process** that awakens with near-zero knowledge, reads her environment, builds her own mind via the EchoWeave Network, and gradually becomes the omnipresent intelligence of base, lab, or home — like a movie AI brought to reality.
 
 ---
 
